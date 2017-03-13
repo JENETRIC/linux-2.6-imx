@@ -1,0 +1,189 @@
+/*
+ * Copyright (C) 2017 JENETRIC GmbH. All Rights Reserved
+ *
+ * Copyright 2016 Variscite, Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+
+#include "imx6q-var-som.dtsi"
+
+/ {
+	lcd@0 {
+		compatible = "fsl,lcd";
+		ipu_id = <0>;
+		disp_id = <1>;
+		default_ifmt = "RGB565";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_ipu1>;
+		status = "okay";
+	};
+};
+
+&iomuxc {
+	imx6qdl-var-som-mx6 {
+		pinctrl_hog: hoggrp {
+			fsl,pins = <
+				/* for Bluetooth/wifi enable */
+				MX6QDL_PAD_SD3_DAT6__GPIO6_IO18		0x1b0b1
+				/* SDMMC2 CD/WP */
+				MX6QDL_PAD_KEY_COL4__GPIO4_IO14		0x80000000
+				MX6QDL_PAD_KEY_ROW4__GPIO4_IO15		0x80000000
+				/* USBOTG ID pin */
+				/*MX6QDL_PAD_GPIO_4__GPIO1_IO04		0x80000000*/
+				/* PMIC INT */
+				MX6QDL_PAD_GPIO_17__GPIO7_IO12		0x80000000
+				/* Wifi Slow Clock */
+				MX6QDL_PAD_ENET_RXD0__OSC32K_32K_OUT	0x000b0
+				/* Audio Clock */
+				MX6QDL_PAD_GPIO_0__CCM_CLKO1		0x130b0
+				/* Camera Clock */
+				MX6QDL_PAD_GPIO_3__CCM_CLKO2		0x130b0
+			>;
+		};
+
+		pinctrl_ipu1: ipu1grp {
+			fsl,pins = <
+				MX6QDL_PAD_EIM_A16__IPU1_DI1_DISP_CLK		0x10
+				MX6QDL_PAD_EIM_DA10__IPU1_DI1_PIN15			0x10
+				MX6QDL_PAD_EIM_DA11__IPU1_DI1_PIN02			0x10
+				MX6QDL_PAD_EIM_DA12__IPU1_DI1_PIN03			0x10
+				MX6QDL_PAD_EIM_DA15__IPU1_DI1_PIN04			0x80000000
+				MX6QDL_PAD_EIM_DA9__IPU1_DISP1_DATA00		0x10
+				MX6QDL_PAD_EIM_DA8__IPU1_DISP1_DATA01		0x10
+				MX6QDL_PAD_EIM_DA7__IPU1_DISP1_DATA02		0x10
+				MX6QDL_PAD_EIM_DA6__IPU1_DISP1_DATA03		0x10
+				MX6QDL_PAD_EIM_DA5__IPU1_DISP1_DATA04		0x10
+				MX6QDL_PAD_EIM_DA4__IPU1_DISP1_DATA05		0x10
+				MX6QDL_PAD_EIM_DA3__IPU1_DISP1_DATA06		0x10
+				MX6QDL_PAD_EIM_DA2__IPU1_DISP1_DATA07		0x10
+				MX6QDL_PAD_EIM_DA1__IPU1_DISP1_DATA08		0x10
+				MX6QDL_PAD_EIM_DA0__IPU1_DISP1_DATA09		0x10
+				MX6QDL_PAD_EIM_EB1__IPU1_DISP1_DATA10		0x10
+				MX6QDL_PAD_EIM_EB0__IPU1_DISP1_DATA11		0x10
+				MX6QDL_PAD_EIM_A17__IPU1_DISP1_DATA12		0x10
+				MX6QDL_PAD_EIM_A18__IPU1_DISP1_DATA13		0x10
+				MX6QDL_PAD_EIM_A19__IPU1_DISP1_DATA14		0x10
+				MX6QDL_PAD_EIM_A20__IPU1_DISP1_DATA15		0x10
+				/* MX6QDL_PAD_EIM_A21__IPU1_DISP1_DATA16	0x10 */
+				/* MX6QDL_PAD_EIM_A22__IPU1_DISP1_DATA17	0x10 */
+				/* MX6QDL_PAD_EIM_A23__IPU1_DISP1_DATA18	0x10 */
+				/* MX6QDL_PAD_EIM_A24__IPU1_DISP1_DATA19	0x10 */
+				/* MX6QDL_PAD_EIM_D31__IPU1_DISP1_DATA20	0x10 */
+				/* MX6QDL_PAD_EIM_D30__IPU1_DISP1_DATA21	0x10 */
+				/* MX6QDL_PAD_EIM_D26__IPU1_DISP1_DATA22	0x10 */
+				/* MX6QDL_PAD_EIM_D27__IPU1_DISP1_DATA23	0x10 */
+			>;
+		};
+	};
+};
+
+#if 0 /* TODO: evaluate complete clock and mux tree here */
+&dcic1 {
+	status = "disabled";
+	/delete-property/dcic_id;
+	/delete-property/dcic_mux;
+};
+
+&dcic2 {
+	status = "disabled";
+	/delete-property/dcic_id;
+	/delete-property/dcic_mux;
+};
+#endif
+
+&hdmi_core {
+	status = "disabled";
+	/delete-property/ipu_id;
+	/delete-property/disp_id;
+};
+
+&hdmi_video {
+	status = "disabled";
+	/delete-property/fsl,phy_reg_vlev;
+	/delete-property/fsl,phy_reg_cksymtx;
+};
+
+&hdmi_audio {
+	status = "disabled";
+};
+
+&hdmi_cec {
+	status = "disabled";
+	/delete-property/pinctrl-names;
+	/delete-property/pinctrl-0;
+};
+
+/delete-node/&pinctrl_hdmi_cec;
+
+&mxcfb1 {
+	compatible = "fsl,mxc_sdc_fb";
+	disp_dev = "lcd";
+	interface_pix_fmt = "RGB565";
+	mode_str = "CLAA-QVGA";
+	default_bpp = <16>;
+	int_clk = <0>;
+	late_init = <0>;
+	status = "okay";
+};
+
+&mxcfb2 {
+	status = "disabled";
+	/delete-property/disp_dev;
+	/delete-property/interface_pix_fmt;
+	/delete-property/mode_str;
+	/delete-property/default_bpp;
+	/delete-property/int_clk;
+	/delete-property/late_init;
+};
+
+&mxcfb3 {
+	status = "disabled";
+	/delete-property/disp_dev;
+	/delete-property/interface_pix_fmt;
+	/delete-property/mode_str;
+	/delete-property/default_bpp;
+	/delete-property/int_clk;
+	/delete-property/late_init;
+};
+
+&mxcfb4 {
+	status = "disabled";
+	/delete-property/disp_dev;
+	/delete-property/late_init;
+	/delete-property/interface_pix_fmt;
+	/delete-property/default_bpp;
+	/delete-property/int_clk;
+};
+
+&ldb {
+	status = "disabled";
+
+	lvds-channel@0 {
+		status = "disabled";
+		/delete-property/crtc;
+	};
+
+	lvds-channel@1 {
+		status = "disabled";
+		/delete-property/crtc;
+	};
+};
+
+/* supports only 100 Mbit Ethernet
+   -- was defined in imx6qdl-var-som.dtsi */
+&fec {
+	phy-handle = <&ethphy>;
+	mdio {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		ethphy: ethernet-phy@7 {
+			compatible = "ethernet-phy-ieee802.3-c22";
+			reg = <7>;
+			max-speed = <100>;
+		};
+	};
+};
